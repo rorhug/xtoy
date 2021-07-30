@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -17,12 +17,14 @@ model User {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   name           String?
-  email          String   @unique
+  email          String   @unique @db.Citext
+  username       String?  @unique @db.Citext
   hashedPassword String?
   role           String   @default("USER")
 
-  tokens   Token[]
-  sessions Session[]
+  tokens          Token[]
+  sessions        Session[]
+  spotifyAccounts SpotifyAccount[]
 }
 
 model Session {
@@ -63,3 +65,20 @@ model Token {
 // enum TokenType {
 //   RESET_PASSWORD
 // }
+
+model SpotifyAccount {
+  id Int @id @default(autoincrement())
+
+  spotifyAccountId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accessToken     String
+  refreshToken    String
+  accessExpiresAt DateTime
+  cachedProfile   Json
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}

@@ -28,6 +28,8 @@ const UserInfo = () => {
           User id: <code>{currentUser.id}</code>
           <br />
           User role: <code>{currentUser.role}</code>
+          <br />
+          spotify username: <code>{currentUser.spotifyAccounts[0]?.spotifyAccountId}</code>
         </div>
       </>
     )
@@ -63,6 +65,8 @@ const Home: BlitzPage = () => {
           <Suspense fallback="Loading...">
             <UserInfo />
           </Suspense>
+
+          <a href="/api/auth/spotify">Log In With Spotify</a>
         </div>
         <p>
           <strong>
