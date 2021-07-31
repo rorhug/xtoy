@@ -82,3 +82,25 @@ model SpotifyAccount {
   userId Int
   user   User @relation(fields: [userId], references: [id])
 }
+
+model Track {
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  kind      MusicType
+  spotifyId String
+  appleId   String
+
+  spotifyBlob Json
+
+  @@index([spotifyId])
+  @@index([appleId])
+}
+
+enum MusicType {
+  TRACK
+  ARTIST
+  ALBUM
+}

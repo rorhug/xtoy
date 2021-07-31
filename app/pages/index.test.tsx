@@ -17,6 +17,19 @@ test.skip("renders blitz documentation link", () => {
     name: "User",
     email: "user@email.com",
     role: "user",
+    spotifyAccounts: [
+      {
+        id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        accessExpiresAt: new Date(),
+        accessToken: "a",
+        refreshToken: "a",
+        cachedProfile: {},
+        spotifyAccountId: "a",
+        userId: 1,
+      },
+    ],
   })
 
   const { getByText } = render(<Home />)
