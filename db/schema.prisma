@@ -25,6 +25,7 @@ model User {
   tokens          Token[]
   sessions        Session[]
   spotifyAccounts SpotifyAccount[]
+  trackPlays      TrackPlay[]
 }
 
 model Session {
@@ -76,6 +77,7 @@ model SpotifyAccount {
 
   accessToken     String
   refreshToken    String
+  scopes          String[]
   accessExpiresAt DateTime
   cachedProfile   Json
 
@@ -83,7 +85,13 @@ model SpotifyAccount {
   user   User @relation(fields: [userId], references: [id])
 }
 
-model Track {
+enum MusicType {
+  TRACK
+  ARTIST
+  ALBUM
+}
+
+model MusicItem {
   id Int @id @default(autoincrement())
 
   createdAt DateTime @default(now())
@@ -91,16 +99,36 @@ model Track {
 
   kind      MusicType
   spotifyId String
-  appleId   String
+  // appleId   String
 
-  spotifyBlob Json
+  spotifyBlob    Json
+  odesliResponse Json?
 
+  // @@index([appleId])
+  trackPlays TrackPlay[]
+
+  @@unique([kind, spotifyId])
   @@index([spotifyId])
-  @@index([appleId])
 }
 
-enum MusicType {
-  TRACK
-  ARTIST
-  ALBUM
+enum TrackPlaySource {
+  PLAYER
+  HISTORY
+}
+
+model TrackPlay {
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  source TrackPlaySource
+
+  musicItemId Int
+  musicItem   MusicItem @relation(fields: [musicItemId], references: [id])
+
+  context Json?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 }

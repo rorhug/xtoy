@@ -4,6 +4,12 @@ import db from "db"
 
 import { Strategy as SpotifyStrategy } from "passport-spotify"
 
+const SPOTIFY_SCOPES = [
+  "user-read-email",
+  // "user-read-private",
+  "user-read-currently-playing",
+  "user-read-recently-played",
+]
 export default passportAuth({
   successRedirectUrl: "/",
   errorRedirectUrl: "/",
@@ -15,7 +21,7 @@ export default passportAuth({
         {
           clientID: process.env.SPOTIFY_CLIENT_ID as string,
           clientSecret: process.env.SPOTIFY_CLIENT_SECRET as string,
-          scope: ["user-read-email", "user-read-private"],
+          scope: SPOTIFY_SCOPES,
           /*...*/
           callbackURL:
             process.env.NODE_ENV === "production"
@@ -41,8 +47,8 @@ export default passportAuth({
               spotifyAccountId: profile.id,
             },
           })
-          let user
 
+          let user
           if (spotifyAccount === null) {
             user = await db.user.upsert({
               where: { email },
@@ -58,6 +64,7 @@ export default passportAuth({
                       refreshToken,
                       accessExpiresAt,
                       cachedProfile: profile,
+                      scopes: SPOTIFY_SCOPES,
                     },
                   ],
                 },
@@ -72,6 +79,7 @@ export default passportAuth({
                     refreshToken,
                     accessExpiresAt,
                     cachedProfile: profile,
+                    scopes: SPOTIFY_SCOPES,
                   }
                 : {
                     cachedProfile: profile,
