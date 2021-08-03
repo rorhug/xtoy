@@ -28,6 +28,7 @@ test.skip("renders blitz documentation link", () => {
         cachedProfile: {},
         spotifyAccountId: "a",
         userId: 1,
+        scopes: [""],
       },
     ],
   })
