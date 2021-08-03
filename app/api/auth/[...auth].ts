@@ -25,7 +25,7 @@ export default passportAuth({
           /*...*/
           callbackURL:
             process.env.NODE_ENV === "production"
-              ? "https://example.com/api/auth/spotify/callback"
+              ? "https://spotifytoapple.xyz/api/auth/spotify/callback"
               : "http://localhost:3000/api/auth/spotify/callback",
           includeEmail: true,
         },
