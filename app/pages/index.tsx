@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { Link, BlitzPage, useMutation, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { useConvertedItem, useCurrentUser, useUserPlays } from "app/core/hooks/useCurrentUser"
@@ -10,46 +10,87 @@ import {
   Grid,
   GridItem,
   Heading,
-  IconButton,
   Text,
   Image,
-  Stack,
+  VStack,
+  HStack,
 } from "@chakra-ui/react"
-import { PhoneIcon, AddIcon, WarningIcon, ExternalLinkIcon, ChatIcon } from "@chakra-ui/icons"
+import { ExternalLinkIcon, ChatIcon, CopyIcon } from "@chakra-ui/icons"
 import { MusicItem } from "db"
-
-const ShareButton = ({ url }: { url: string }) => {
-  if (!navigator.share) return null
-
-  return (
-    <Button
-      leftIcon={<ExternalLinkIcon />}
-      colorScheme="gray"
-      variant="solid"
-      onClick={() => navigator.share({ url })}
-    >
-      Share
-    </Button>
-  )
-}
+import { CopyToClipboard } from "react-copy-to-clipboard"
 
 const ConvertedTrack = ({ musicItem }: { musicItem: MusicItem }) => {
   const item = useConvertedItem(musicItem)
+  const [copied, setCopied] = useState(false)
 
   console.log(item)
 
   const appleUrl = (item.odesliResponse as any)?.linksByPlatform?.appleMusic?.url
 
   if (!appleUrl) return <p>No apple link...</p>
-
+  // paddingBottom={5}
   return (
     <div>
-      <Stack direction="row" spacing={4} align="center">
-        <ShareButton url={appleUrl} />
-        <Button leftIcon={<ChatIcon />} colorScheme="gray" as="a" href={`sms:&body=${appleUrl}`}>
-          Message
+      <HStack spacing={2} align="center" paddingBottom={5} wrap="wrap">
+        <VStack textAlign="center">
+          <Image
+            src="/Apple_logo_black.svg"
+            alt="apple logo"
+            filter="invert(100%)"
+            width="20px"
+            display="inline"
+          />
+          <Text display="inline" marginTop="0 !important">
+            Apple
+          </Text>
+        </VStack>
+
+        {navigator.share && (
+          <Button
+            colorScheme="gray"
+            variant="solid"
+            onClick={() => navigator.share({ url: appleUrl })}
+            flexDir="column"
+            paddingX={2}
+            paddingY={6}
+            flexGrow={1}
+          >
+            <ExternalLinkIcon />
+            Share
+          </Button>
+        )}
+
+        <Button
+          colorScheme="gray"
+          flexDir="column"
+          as="a"
+          href={`sms:&body=${appleUrl}`}
+          paddingX={3}
+          paddingY={6}
+          flexGrow={1}
+        >
+          <ChatIcon />
+          <Text>Text</Text>
         </Button>
-      </Stack>
+        <CopyToClipboard text={appleUrl} onCopy={() => setCopied(true)}>
+          <Button
+            colorScheme={copied ? "green" : "gray"}
+            flexDir="column"
+            paddingX={2}
+            paddingY={6}
+            flexGrow={1}
+          >
+            <CopyIcon />
+            <Text>{copied ? "Copied" : "Copy"}</Text>
+          </Button>
+        </CopyToClipboard>
+      </HStack>
+
+      <a href={appleUrl} target="_blank" rel="noreferrer">
+        <Code wordBreak="break-all" fontSize="11px">
+          {appleUrl}
+        </Code>
+      </a>
     </div>
   )
 }
@@ -67,21 +108,17 @@ const Track = () => {
   const track = play.musicItem.spotifyBlob as unknown as SpotifyApi.TrackObjectFull
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" padding={5}>
-      <Text paddingBottom={2} fontSize="13px">
-        Now playing...
-      </Text>
-      <Grid templateRows="repeat(2, 1fr)" templateColumns="repeat(3, 1fr)" gap={4}>
-        <GridItem rowSpan={2} colSpan={1}>
+    <Box borderWidth="1px" borderRadius="lg" padding={2}>
+      <Grid templateRows="repeat(1, 1fr)" templateColumns="repeat(5, 1fr)" gap={4}>
+        <GridItem colSpan={2} rowSpan={1}>
           <Image src={track.album.images[0]?.url} alt={`Album art for ${track.album.name}`} />
         </GridItem>
-        <GridItem colSpan={2}>
-          <Heading as="h3" size="lg">
+        <GridItem colSpan={3} rowSpan={1}>
+          <Heading as="h3" size="md">
             {track.name}
           </Heading>
-          <p>{track.artists.map((a) => a.name).join(",")}</p>
-        </GridItem>
-        <GridItem colSpan={2}>
+          <Text paddingBottom={4}>{track.artists.map((a) => a.name).join(", ")}</Text>
+
           <Suspense fallback="Loading...">
             <ConvertedTrack musicItem={play.musicItem} />
           </Suspense>
@@ -100,11 +137,14 @@ const UserInfo = () => {
   if (currentUser) {
     return (
       <>
+        <Text paddingBottom={1} fontSize="13px">
+          Now playing...
+        </Text>
         <Track />
 
         <Box paddingTop={10}>
           <Button
-            size="xs"
+            size="sm"
             onClick={async () => {
               await logoutMutation()
             }}

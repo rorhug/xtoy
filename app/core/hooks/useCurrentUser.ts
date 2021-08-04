@@ -11,7 +11,7 @@ export const useCurrentUser = () => {
 
 export const useUserPlays = () => {
   const [res] = useQuery(userPlays, null, {
-    staleTime: 10000,
+    staleTime: 3000,
     // enabled: typeof window !== "undefined",
   })
   return res
@@ -21,7 +21,7 @@ export const useConvertedItem = (musicItem: MusicItem) => {
   const [item] = useQuery(
     convertedItem,
     { musicItemId: musicItem.id },
-    { staleTime: 10000, enabled: !musicItem.odesliResponse }
+    { staleTime: 3000, enabled: !musicItem.odesliResponse }
   )
   return item || musicItem
 }

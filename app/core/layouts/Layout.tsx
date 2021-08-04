@@ -15,7 +15,7 @@ const Layout = ({ title, children }: LayoutProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container maxW="container.sm" p={4}>
+      <Container maxW="container.sm" p={2}>
         <Heading as="h1">
           Spotify
           <Text fontSize="20px" color="gray" as="span" fontWeight="light">

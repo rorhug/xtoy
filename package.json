@@ -34,6 +34,7 @@
     "framer-motion": "3.2.0",
     "passport-spotify": "2.0.0",
     "react": "alpha",
+    "react-copy-to-clipboard": "5.0.3",
     "react-dom": "alpha",
     "react-final-form": "6.5.3",
     "spotify-web-api-node": "5.0.2",
