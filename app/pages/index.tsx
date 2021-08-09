@@ -296,7 +296,13 @@ const Home: BlitzPage = () => {
   return (
     <div className="container">
       <main>
-        <Suspense fallback="Loading...">
+        <Suspense
+          fallback={
+            <Stack>
+              <Skeleton height="120px"></Skeleton>
+            </Stack>
+          }
+        >
           <Page />
         </Suspense>
       </main>
