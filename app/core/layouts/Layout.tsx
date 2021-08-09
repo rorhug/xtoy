@@ -12,6 +12,7 @@ import {
   Image,
   Stack,
   Skeleton,
+  useColorMode,
 } from "@chakra-ui/react"
 import { Head, useMutation } from "blitz"
 import React, { createContext, ReactNode } from "react"
@@ -31,6 +32,7 @@ export const UserContext = createContext<ReturnType<typeof useCurrentUser>[0]>(n
 const Layout = ({ title, children }: LayoutProps) => {
   const [currentUser, { isLoading }] = useCurrentUser()
   const [logoutMutation] = useMutation(logout)
+  const { toggleColorMode } = useColorMode()
 
   const picture = (currentUser?.spotifyAccounts[0]?.cachedProfile as any)?.photos?.[0]?.value
 
@@ -53,23 +55,29 @@ const Layout = ({ title, children }: LayoutProps) => {
 
       <Container maxW="container.md" p={2}>
         <Box display="flex" alignItems="center">
-          <Heading as="h1" fontSize={[70, 100]} flex="1">
-            <Text fontSize="1em" display="inline">
+          <Heading as="h1" fontSize={[70, 100, 130]} flex="1" my={["-0.3em", "-0.2em"]}>
+            <Text fontSize="1em" display="inline" letterSpacing="-0.0em">
               X
             </Text>
             <Text
               fontSize="0.6em"
-              color="gray"
+              color="gray.500"
               as="span"
               fontWeight="light"
-              letterSpacing="-0.9.em"
+              letterSpacing="-0.1em"
             >
               to
             </Text>
-            <Text fontSize="1em" display="inline" marginLeft="-0.2em">
+            <Text fontSize="1em" display="inline" letterSpacing="-0.25em" ml="-0.15em">
               Y
             </Text>
-            <Text fontSize="0.6em" color="gray" as="span" fontWeight="light" marginLeft="-0.4em">
+            <Text
+              fontSize="0.6em"
+              color="gray.500"
+              as="span"
+              fontWeight="light"
+              letterSpacing="-0.05em"
+            >
               .pro
             </Text>
           </Heading>
@@ -90,12 +98,15 @@ const Layout = ({ title, children }: LayoutProps) => {
                 {isLoading ? "loading..." : currentUser?.name}
               </MenuButton>
               {!isLoading && (
-                <MenuList
-                  onClick={async () => {
-                    await logoutMutation()
-                  }}
-                >
-                  <MenuItem>Logout</MenuItem>
+                <MenuList>
+                  <MenuItem
+                    onClick={async () => {
+                      await logoutMutation()
+                    }}
+                  >
+                    Logout
+                  </MenuItem>
+                  <MenuItem onClick={toggleColorMode}>Toggle Light/Dark</MenuItem>
                 </MenuList>
               )}
             </Menu>

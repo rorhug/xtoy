@@ -21,6 +21,7 @@ import {
   Stack,
   StackDivider,
   Text,
+  useColorMode,
   VStack,
 } from "@chakra-ui/react"
 import { useConvertedItem, usePlayHistory, useUserPlays } from "app/core/hooks/useCurrentUser"
@@ -49,7 +50,7 @@ const ConvertedTrack = (props: { musicItem: MusicItem }) => {
   return (
     <VStack
       width="100%"
-      divider={<StackDivider borderColor="gray.700" />}
+      divider={<StackDivider borderColor="gray.300" />}
       spacing={2}
       paddingBottom={6}
     >
@@ -84,6 +85,7 @@ const ServiceButton = ({
 
 const Service = ({ service, url }: { service: string; url?: string }) => {
   const [copied, setCopied] = useState(false)
+  const { colorMode } = useColorMode()
 
   return (
     <Box width="100%">
@@ -100,7 +102,7 @@ const Service = ({ service, url }: { service: string; url?: string }) => {
           <Image
             src={`/${service}.svg`}
             alt="apple logo"
-            filter="invert(100%)"
+            filter={colorMode === "dark" ? "invert(100%)" : undefined}
             height="25px"
             display="inline"
             marginTop="4px"
@@ -160,13 +162,18 @@ const Play = ({
   setOpen: () => void
   play: TrackPlay & { musicItem: MusicItem }
 }) => {
+  const { colorMode } = useColorMode()
   const track = play.musicItem.spotifyBlob as unknown as SpotifyApi.TrackObjectFull
 
   return (
     <Box
       padding={0}
       onClick={setOpen}
-      {...{ ...(!open && { _hover: { cursor: "pointer", background: "gray.700" } }) }}
+      {...{
+        ...(!open && {
+          _hover: { cursor: "pointer", background: colorMode === "dark" ? "gray.700" : "blue.100" },
+        }),
+      }}
     >
       <Grid templateRows="repeat(1, 1fr)" templateColumns="repeat(5, 1fr)" gap={2}>
         <GridItem colSpan={1} rowSpan={1}>
@@ -241,6 +248,8 @@ const Feed = () => {
 
 const Page = () => {
   const currentUser = useContext(UserContext)
+  const { colorMode } = useColorMode()
+  const filter = colorMode === "dark" ? "invert(100%)" : undefined
 
   if (currentUser) {
     return <Feed />
@@ -252,7 +261,7 @@ const Page = () => {
             <Image
               src={`/spotify.svg`}
               alt="apple logo"
-              filter="invert(100%)"
+              filter={filter}
               height="85px"
               marginTop="4px"
               display="inline"
@@ -265,7 +274,7 @@ const Page = () => {
             <Image
               src={`/appleMusic.svg`}
               alt="apple logo"
-              filter="invert(100%)"
+              filter={filter}
               height="85px"
               marginTop="4px"
               display="inline"
