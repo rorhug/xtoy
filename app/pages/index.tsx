@@ -230,9 +230,14 @@ const Feed = () => {
         <Play play={current} open={openedId === undefined} setOpen={() => setOpenedId(undefined)} />
       )}
 
-      <Text paddingBottom={1} paddingTop={6} fontSize="20px" color="gray.500">
-        History:
-      </Text>
+      <HStack alignItems="center">
+        <Text paddingBottom={1} paddingTop={6} fontSize="20px" color="gray.500" flex="1">
+          History:
+        </Text>
+        <Text paddingBottom={1} paddingTop={6} fontSize="13px" color="gray.500">
+          tap to share
+        </Text>
+      </HStack>
 
       {userHistory?.map((play) => (
         <Play
