@@ -12,26 +12,29 @@ test.skip("renders blitz documentation link", () => {
   // when you remove the the default content from the page
 
   // This is an example on how to mock api hooks when testing
-  mockUseCurrentUser.mockReturnValue({
-    id: 1,
-    name: "User",
-    email: "user@email.com",
-    role: "user",
-    spotifyAccounts: [
-      {
-        id: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        accessExpiresAt: new Date(),
-        accessToken: "a",
-        refreshToken: "a",
-        cachedProfile: {},
-        spotifyAccountId: "a",
-        userId: 1,
-        scopes: [""],
-      },
-    ],
-  })
+  // mockUseCurrentUser.mockReturnValue([
+  //   {
+  //     id: 1,
+  //     name: "User",
+  //     email: "user@email.com",
+  //     role: "user",
+  //     spotifyAccounts: [
+  //       {
+  //         id: 1,
+  //         createdAt: new Date(),
+  //         updatedAt: new Date(),
+  //         accessExpiresAt: new Date(),
+  //         accessToken: "a",
+  //         refreshToken: "a",
+  //         cachedProfile: {},
+  //         spotifyAccountId: "a",
+  //         userId: 1,
+  //         scopes: [""],
+  //       },
+  //     ],
+  //   },
+  //   {},
+  // ])
 
   const { getByText } = render(<Home />)
   const linkElement = getByText(/Documentation/i)

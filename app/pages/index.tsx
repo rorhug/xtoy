@@ -88,7 +88,15 @@ const Service = ({ service, url }: { service: string; url?: string }) => {
   return (
     <Box width="100%">
       <HStack paddingBottom={0} display="flex" width="100%" alignItems="stretch">
-        <VStack textAlign="center" flex={1} paddingTop={1}>
+        <VStack
+          textAlign="center"
+          paddingTop={1}
+          flex={1}
+          as="a"
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+        >
           <Image
             src={`/${service}.svg`}
             alt="apple logo"
