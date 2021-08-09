@@ -89,7 +89,6 @@ export default async function playHistory(_ = null, ctx: Ctx) {
     include: { musicItem: true },
     where: { userId: user.id, source: TrackPlaySource.HISTORY },
     orderBy: { playedAt: "desc" },
-    take: 10,
-    // limit: 1
+    take: 30,
   })
 }
