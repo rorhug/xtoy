@@ -37,7 +37,7 @@ const Layout = ({ title, children }: LayoutProps) => {
   return (
     <UserContext.Provider value={currentUser}>
       <Head>
-        <title>{title || "xtoy"}</title>
+        <title>{title && title + " | "} XtoY.pro</title>
         <link rel="icon" href="/favicon.ico" />
 
         <style>
