@@ -7,7 +7,10 @@ const config: ThemeConfig = {
   useSystemColorMode: true,
 }
 // 3. extend the theme
-const theme = extendTheme({ config })
+export const theme = extendTheme({
+  config,
+  fonts: { body: "Inter, system-ui, sans-serif", heading: "Inter, system-ui, sans-serif" },
+})
 
 class MyDocument extends Document {
   // Only uncomment if you need to customize this behaviour

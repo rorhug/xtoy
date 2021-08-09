@@ -1,7 +1,10 @@
 import { Ctx, NotFoundError } from "blitz"
 import db from "db"
 
-export default async function convertedItem(params: { musicItemId: number }, ctx: Ctx) {
+export default async function convertedItem(
+  params: { musicItemId: number; force: boolean },
+  ctx: Ctx
+) {
   ctx.session.$authorize()
 
   let item = await db.musicItem.findFirst({ where: { id: params.musicItemId } })
@@ -10,7 +13,7 @@ export default async function convertedItem(params: { musicItemId: number }, ctx
     throw new NotFoundError()
   }
 
-  if (!item.odesliResponse) {
+  if (!item.odesliResponse || params.force) {
     console.log(`Fetching fromo odesli ${item.spotifyId} ${item.id}`)
 
     const track = item.spotifyBlob as unknown as SpotifyApi.TrackObjectFull

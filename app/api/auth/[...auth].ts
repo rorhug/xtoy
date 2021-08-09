@@ -25,7 +25,7 @@ export default passportAuth({
           /*...*/
           callbackURL:
             process.env.NODE_ENV === "production"
-              ? "https://spotifytoapple.xyz/api/auth/spotify/callback"
+              ? "https://xtoy.pro/api/auth/spotify/callback"
               : "http://localhost:3000/api/auth/spotify/callback",
           includeEmail: true,
         },
@@ -39,6 +39,7 @@ export default passportAuth({
           }
 
           delete profile._raw
+          delete profile._json
 
           const accessExpiresAt = expiresIn && new Date(new Date().getTime() + expiresIn * 1000)
 

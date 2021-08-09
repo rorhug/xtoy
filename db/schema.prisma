@@ -122,7 +122,8 @@ model TrackPlay {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  source TrackPlaySource
+  source   TrackPlaySource
+  playedAt DateTime?
 
   musicItemId Int
   musicItem   MusicItem @relation(fields: [musicItemId], references: [id])
@@ -131,4 +132,6 @@ model TrackPlay {
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
+
+  @@index([userId, playedAt])
 }
