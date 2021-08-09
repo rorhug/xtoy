@@ -22,7 +22,7 @@ export default async function playHistory(_ = null, ctx: Ctx) {
 
   const spotify = await getRefreshedSpotify(spotifyAccount)
 
-  console.log("Getting current playing...")
+  console.log("Getting recently played...")
   const response = (await spotify.getMyRecentlyPlayedTracks()).body
   const items = response.items
 
