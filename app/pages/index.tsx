@@ -4,7 +4,9 @@ import {
   CopyIcon,
   ExternalLinkIcon,
   WarningIcon,
+  ChevronRightIcon,
 } from "@chakra-ui/icons"
+import { RasterImage } from "../core/components/Image"
 import {
   Alert,
   Box,
@@ -16,9 +18,9 @@ import {
   Heading,
   HStack,
   IconProps,
-  Image,
   Skeleton,
   Stack,
+  Image,
   StackDivider,
   Text,
   useColorMode,
@@ -48,12 +50,7 @@ const ConvertedTrack = (props: { musicItem: MusicItem }) => {
   // delete links.appleMusic
 
   return (
-    <VStack
-      width="100%"
-      divider={<StackDivider borderColor="gray.300" />}
-      spacing={2}
-      paddingBottom={6}
-    >
+    <VStack width="100%" divider={<StackDivider />} spacing={2} paddingBottom={6}>
       {SERVICES.map((serviceName) => {
         const url = links[serviceName]?.url
 
@@ -189,7 +186,7 @@ const Play = ({
           >
             {track.name}
           </Heading>
-          <Text paddingBottom={4} color="gray.500">
+          <Text paddingBottom={4} color="gray.500" fontSize="1.2em">
             {track.artists.map((a) => a.name).join(", ")}
           </Text>
         </GridItem>
@@ -199,9 +196,9 @@ const Play = ({
         <Suspense
           fallback={
             <Stack paddingY={2}>
-              <Skeleton height={20} />
-              <Skeleton height={20} />
-              <Skeleton height={20} />
+              <Skeleton height={18} />
+              <Skeleton height={18} />
+              <Skeleton height={18} />
             </Stack>
           }
         >
@@ -261,19 +258,21 @@ const Page = () => {
   } else {
     return (
       <>
-        <Grid templateColumns="repeat(3, 1fr)" gap={1}>
+        <Grid templateColumns="repeat(3, 1fr)" gap={1} mt="4em">
           <Box w="100%" textAlign="right">
             <Image
               src={`/spotify.svg`}
-              alt="apple logo"
+              alt="spotify logo"
               filter={filter}
               height="85px"
+              width="85px"
               marginTop="4px"
               display="inline"
+              layout="fill"
             />
           </Box>
           <Box w="100%" textAlign="center">
-            <ArrowForwardIcon fontSize={100} />
+            <ChevronRightIcon fontSize={100} />
           </Box>
           <Box w="100%" textAlign="left">
             <Image
@@ -281,16 +280,51 @@ const Page = () => {
               alt="apple logo"
               filter={filter}
               height="85px"
+              width="85px"
               marginTop="4px"
               display="inline"
+              objectFit="contain"
+              layout="fill"
             />
           </Box>
         </Grid>
-        <Text paddingY={10} fontSize="30px" letterSpacing="-0.06em" textAlign="center">
-          Quickly send songs to Apple folk.
+
+        <Text
+          pt={4}
+          fontSize="30px"
+          letterSpacing="-0.06em"
+          textAlign="center"
+          fontWeight="bold"
+          lineHeight=""
+        >
+          You know that friend who&apos;s on Apple Music?
         </Text>
-        <Button colorScheme="green" as="a" href="/api/auth/spotify" isFullWidth={true} size="lg">
-          Log In With Spotify
+        <Text pb={4} fontSize="20px" letterSpacing="-0.06em" textAlign="center" mb="2em">
+          Quickly send them what you&apos;re playing{" "}
+          <Text as="strong" letterSpacing="normal">
+            right now
+          </Text>
+          .
+        </Text>
+
+        <Button
+          colorScheme="gray"
+          as="a"
+          href="/api/auth/spotify"
+          isFullWidth={true}
+          size="lg"
+          fontSize="1.5em"
+          color="gray.300"
+        >
+          Log In using
+          <Image
+            src="/spotifylogo.svg"
+            alt="Spotify"
+            height={30}
+            layout="fill"
+            objectFit="cover"
+            pl="0.3em"
+          />
         </Button>
       </>
     )

@@ -10,10 +10,21 @@ const config: ThemeConfig = {
 export const theme = extendTheme({
   config,
   fonts: { body: "Inter, system-ui, sans-serif", heading: "Inter, system-ui, sans-serif" },
+  // colors: { green: { 200: "#1db054" } },
+  letterSpacings: {
+    // normal: "-0.05em",
+  },
+  styles: {
+    global: {
+      "html, body": {
+        letterSpacing: "-0.05em",
+      },
+    },
+  },
 })
 
 class MyDocument extends Document {
-  // Only uncomment if you need to customize this behaviour
+  // Obnly uncomment if you need to customize this behaviour
   // static async getInitialProps(ctx: DocumentContext) {
   //   const initialProps = await Document.getInitialProps(ctx)
   //   return {...initialProps}

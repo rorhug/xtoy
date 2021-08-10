@@ -13,6 +13,8 @@ import {
   Stack,
   Skeleton,
   useColorMode,
+  Link,
+  MenuDivider,
 } from "@chakra-ui/react"
 import { Head, useMutation } from "blitz"
 import React, { createContext, ReactNode } from "react"
@@ -97,8 +99,19 @@ const Layout = ({ title, children }: LayoutProps) => {
                 )}
                 {isLoading ? "loading..." : currentUser?.name}
               </MenuButton>
-              {!isLoading && (
-                <MenuList>
+
+              <MenuList>
+                <MenuItem
+                  as="a"
+                  href="https://twitter.com/rorhug"
+                  target="_blank"
+                  letterSpacing="normal"
+                >
+                  Follow @rorhug
+                </MenuItem>
+                <MenuItem onClick={toggleColorMode}>Toggle Light/Dark</MenuItem>
+                <MenuDivider />
+                {!isLoading && (
                   <MenuItem
                     onClick={async () => {
                       await logoutMutation()
@@ -106,20 +119,10 @@ const Layout = ({ title, children }: LayoutProps) => {
                   >
                     Logout
                   </MenuItem>
-                  <MenuItem onClick={toggleColorMode}>Toggle Light/Dark</MenuItem>
-                </MenuList>
-              )}
+                )}
+              </MenuList>
             </Menu>
           )}
-
-          {/* <Button
-            size="sm"
-            onClick={async () => {
-              await logoutMutation()
-            }}
-          >
-            Logout
-          </Button> */}
         </Box>
 
         <Box paddingTop={3}>
@@ -132,9 +135,16 @@ const Layout = ({ title, children }: LayoutProps) => {
           )}
         </Box>
 
-        <Box as="footer" paddingTop={20}>
-          Made by <a href="https://twitter.com/rorhug">@rorhug</a>
-        </Box>
+        <Text as="footer" paddingY={50} fontSize="1.2em">
+          Made by{" "}
+          <Link
+            href="https://twitter.com/rorhug"
+            target="_blank"
+            textDecoration="underline !important"
+          >
+            @rorhug
+          </Link>
+        </Text>
       </Container>
     </UserContext.Provider>
   )
