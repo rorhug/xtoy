@@ -183,8 +183,8 @@ const Service: React.FC<{ service: string; url?: string; nolink?: boolean }> = (
 
         {url ? (
           <>
-            {(true || navigator.share) && (
-              <ServiceButton onClick={() => navigator.share({ url })} icon={ExternalLinkIcon}>
+            {navigator.share && (
+              <ServiceButton onClick={() => navigator.share({ text: url })} icon={ExternalLinkIcon}>
                 Share
               </ServiceButton>
             )}
@@ -192,7 +192,7 @@ const Service: React.FC<{ service: string; url?: string; nolink?: boolean }> = (
             <ServiceButton
               icon={ChatIcon}
               as="a"
-              href={`sms:&body=${url}`} //whatsapp://send?text=
+              href={`sms:&body=${encodeURIComponent(url)}`} //whatsapp://send?text=
             >
               <Text>Text</Text>
             </ServiceButton>
