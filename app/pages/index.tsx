@@ -39,6 +39,7 @@ const SERVICES = ["appleMusic", "spotify", "youtube"]
 const ConvertedTrack = (props: { musicItem: MusicItem }) => {
   const item = useConvertedItem({ musicItem: props.musicItem })
   const links = (item?.odesliResponse as any)?.linksByPlatform //?.appleMusic?.url
+  const { colorMode } = useColorMode()
 
   if (!links) {
     return (
@@ -47,11 +48,65 @@ const ConvertedTrack = (props: { musicItem: MusicItem }) => {
       </Alert>
     )
   }
+
+  const availableServices = SERVICES.filter(
+    (name) => links[name]?.url && links[name]?.url.length > 5
+  )
+
+  // const all = SERVICES.map((name) => links[name]?.url && [name, links[name]?.url]).filter(
+  //   (url) => url
+  // )
+
   // delete links.appleMusic
 
   return (
     <VStack width="100%" divider={<StackDivider />} spacing={2}>
-      {SERVICES.map((serviceName) => {
+      {availableServices.length > 0 && (
+        <Service
+          key="all"
+          service="All"
+          url={
+            "• " +
+            availableServices.map((name) => links[name]?.url).join("\n• ") +
+            "\n\nuse https://XtoY.PRO 🔮"
+          }
+          nolink={true}
+        >
+          {/* <Box height="100%" width="100%" flexDirection="column"> */}
+          <Text display="inline" fontWeight="semibold" fontSize="16px">
+            All
+          </Text>
+          <Grid
+            height="100%"
+            width="100%"
+            templateColumns="repeat(3, 1fr)"
+            gap={1}
+            justifyItems="center"
+            alignItems="center"
+            mt="0 !important"
+          >
+            {availableServices.map((name, i) => (
+              <Image
+                key={name}
+                src={`/${name}.svg`}
+                alt={`${name} logo`}
+                filter={colorMode === "dark" ? "invert(100%)" : undefined}
+                height={name === "youtube" ? "20px" : "24px"}
+                display="inline"
+                marginTop="4px"
+                objectFit="contain"
+                layout="fill"
+                // ml={(i % 2 === 0 && "auto") || undefined}
+                // mr={(i % 2 === 1 && "auto") || undefined}
+              />
+            ))}
+          </Grid>
+
+          {/* </Box> */}
+        </Service>
+      )}
+
+      {SERVICES.filter((n) => !availableServices.includes(n)).map((serviceName) => {
         const url = links[serviceName]?.url
 
         return <Service key={serviceName} service={serviceName} url={url} />
@@ -80,7 +135,12 @@ const ServiceButton = ({
   </Button>
 )
 
-const Service = ({ service, url }: { service: string; url?: string }) => {
+const Service: React.FC<{ service: string; url?: string; nolink?: boolean }> = ({
+  service,
+  url,
+  nolink,
+  children,
+}) => {
   const [copied, setCopied] = useState(false)
   const { colorMode } = useColorMode()
 
@@ -91,22 +151,34 @@ const Service = ({ service, url }: { service: string; url?: string }) => {
           textAlign="center"
           paddingTop={1}
           flex={1}
-          as="a"
-          href={url}
-          target="_blank"
-          rel="noreferrer"
+          // as="a"
+          // href={url}
+          // target="_blank"
+          // rel="noreferrer"
         >
-          <Image
-            src={`/${service}.svg`}
-            alt="apple logo"
-            filter={colorMode === "dark" ? "invert(100%)" : undefined}
-            height="25px"
-            display="inline"
-            marginTop="4px"
-          />
-          <Text display="inline" marginTop="4px !important" fontWeight="semibold" fontSize="16px">
-            {SERVICE_NAMES[service] || service}
-          </Text>
+          {children ? (
+            children
+          ) : (
+            <>
+              <Image
+                src={`/${service}.svg`}
+                alt={`${service} logo`}
+                filter={colorMode === "dark" ? "invert(100%)" : undefined}
+                height="25px"
+                display="inline"
+                marginTop="4px"
+              />
+
+              <Text
+                display="inline"
+                marginTop="4px !important"
+                fontWeight="semibold"
+                fontSize="16px"
+              >
+                {SERVICE_NAMES[service] || service}
+              </Text>
+            </>
+          )}
         </VStack>
 
         {url ? (
@@ -165,6 +237,7 @@ const Play = ({
   return (
     <Box
       padding={0}
+      // pt={(open && "2rem") || undefined}
       onClick={setOpen}
       {...{
         ...(!open && {
@@ -172,21 +245,21 @@ const Play = ({
         }),
       }}
     >
-      <Grid templateRows="repeat(1, 1fr)" templateColumns="repeat(5, 1fr)" gap={2}>
+      <Grid templateRows="repeat(1, 1fr)" templateColumns="repeat(4, 1fr)" gap={2}>
         <GridItem colSpan={1} rowSpan={1}>
           <Image src={track.album.images[1]?.url} alt={`Album art for ${track.album.name}`} />
         </GridItem>
-        <GridItem colSpan={4} rowSpan={1}>
+        <GridItem colSpan={3} rowSpan={1}>
           <Heading
             as="h2"
-            fontSize={{ md: "4xl", sm: "2xl", base: "xl" }}
+            fontSize={{ md: "4xl", sm: "2xl", base: "md" }}
             textOverflow="ellipsis"
             overflow="hidden"
             whiteSpace="nowrap"
           >
             {track.name}
           </Heading>
-          <Text paddingBottom={4} color="gray.500" fontSize="1.2em">
+          <Text paddingBottom={4} color="gray.500" fontSize={{ md: "xl", sm: "lg", base: "sm" }}>
             {track.artists.map((a) => a.name).join(", ")}
           </Text>
         </GridItem>
@@ -198,8 +271,8 @@ const Play = ({
             fallback={
               <Stack spacing={4} py={3}>
                 <Skeleton height="64px" />
-                <Skeleton height="64px" />
-                <Skeleton height="64px" />
+                {/* <Skeleton height="64px" />
+                <Skeleton height="64px" /> */}
               </Stack>
             }
           >
