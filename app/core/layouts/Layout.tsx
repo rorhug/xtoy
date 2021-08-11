@@ -57,7 +57,7 @@ const Layout = ({ title, children }: LayoutProps) => {
 
       <Container maxW="container.md" p={2}>
         <Box display="flex" alignItems="center">
-          <Heading as="h1" fontSize={[70, 100, 130]} flex="1" my={["-0.3em", "-0.2em"]}>
+          <Heading as="h1" fontSize={[70, 100, 130]} flex="1" my={["-0.3em", "-0.2em", "0em"]}>
             <Text fontSize="1em" display="inline" letterSpacing="-0.0em">
               X
             </Text>

@@ -50,7 +50,7 @@ const ConvertedTrack = (props: { musicItem: MusicItem }) => {
   // delete links.appleMusic
 
   return (
-    <VStack width="100%" divider={<StackDivider />} spacing={2} paddingBottom={6}>
+    <VStack width="100%" divider={<StackDivider />} spacing={2}>
       {SERVICES.map((serviceName) => {
         const url = links[serviceName]?.url
 
@@ -193,19 +193,21 @@ const Play = ({
       </Grid>
 
       {open && (
-        <Suspense
-          fallback={
-            <Stack paddingY={2}>
-              <Skeleton height={18} />
-              <Skeleton height={18} />
-              <Skeleton height={18} />
-            </Stack>
-          }
-        >
-          <VStack spacing={3} paddingTop={3}>
-            <ConvertedTrack musicItem={play.musicItem} />
-          </VStack>
-        </Suspense>
+        <Box pb="2rem">
+          <Suspense
+            fallback={
+              <Stack spacing={4} py={3}>
+                <Skeleton height="64px" />
+                <Skeleton height="64px" />
+                <Skeleton height="64px" />
+              </Stack>
+            }
+          >
+            <VStack py={3}>
+              <ConvertedTrack musicItem={play.musicItem} />
+            </VStack>
+          </Suspense>
+        </Box>
       )}
     </Box>
   )
