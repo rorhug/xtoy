@@ -39,6 +39,7 @@ const SERVICES = ["appleMusic", "spotify", "youtube"]
 const ConvertedTrack = (props: { musicItem: MusicItem }) => {
   const item = useConvertedItem({ musicItem: props.musicItem })
   const links = (item?.odesliResponse as any)?.linksByPlatform //?.appleMusic?.url
+  const track = props.musicItem.spotifyBlob as unknown as SpotifyApi.TrackObjectFull
   const { colorMode } = useColorMode()
 
   if (!links) {
@@ -58,6 +59,7 @@ const ConvertedTrack = (props: { musicItem: MusicItem }) => {
   // )
 
   // delete links.appleMusic
+  const artists = track.artists.length
 
   return (
     <VStack width="100%" divider={<StackDivider />} spacing={2}>
@@ -65,11 +67,14 @@ const ConvertedTrack = (props: { musicItem: MusicItem }) => {
         <Service
           key="all"
           service="All"
-          url={
-            "• " +
-            availableServices.map((name) => links[name]?.url).join("\n• ") +
-            "\n\nuse https://XtoY.PRO 🔮"
-          }
+          url={`${artists > 0 ? track.artists[0]!.name : ""}${
+            artists > 1 ? " +" + (artists - 1).toString() : ""
+          } - ${track.name}
+• ${availableServices.map((name) => links[name]?.url).join("\n• ")}
+
+use https://XtoY.PRO 🔮
+
+`}
           nolink={true}
         >
           {/* <Box height="100%" width="100%" flexDirection="column"> */}
@@ -232,7 +237,7 @@ const Play = ({
   play: TrackPlay & { musicItem: MusicItem }
 }) => {
   const { colorMode } = useColorMode()
-  const track = play.musicItem.spotifyBlob as unknown as SpotifyApi.TrackObjectFull
+  const track = play.musicItem.spotifyBlob as unknown as SpotifyApi.TrackObjectFull | null
 
   return (
     <Box
@@ -245,26 +250,11 @@ const Play = ({
         }),
       }}
     >
-      <Grid templateRows="repeat(1, 1fr)" templateColumns="repeat(4, 1fr)" gap={2}>
-        <GridItem colSpan={1} rowSpan={1}>
-          <Image src={track.album.images[1]?.url} alt={`Album art for ${track.album.name}`} />
-        </GridItem>
-        <GridItem colSpan={3} rowSpan={1}>
-          <Heading
-            as="h2"
-            fontSize={{ md: "4xl", sm: "2xl", base: "md" }}
-            textOverflow="ellipsis"
-            overflow="hidden"
-            whiteSpace="nowrap"
-          >
-            {track.name}
-          </Heading>
-          <Text paddingBottom={4} color="gray.500" fontSize={{ md: "xl", sm: "lg", base: "sm" }}>
-            {track.artists.map((a) => a.name).join(", ")}
-          </Text>
-        </GridItem>
-      </Grid>
-
+      {track ? (
+        <TrackInformation track={track} />
+      ) : (
+        <Alert variant="error">No track information from spotify</Alert>
+      )}
       {open && (
         <Box pb="2rem">
           <Suspense
@@ -285,6 +275,28 @@ const Play = ({
     </Box>
   )
 }
+
+const TrackInformation = ({ track }: { track: SpotifyApi.TrackObjectFull }) => (
+  <Grid templateRows="repeat(1, 1fr)" templateColumns="repeat(4, 1fr)" gap={2}>
+    <GridItem colSpan={1} rowSpan={1}>
+      <Image src={track.album.images[1]?.url} alt={`Album art for ${track.album.name}`} />
+    </GridItem>
+    <GridItem colSpan={3} rowSpan={1}>
+      <Heading
+        as="h2"
+        fontSize={{ md: "4xl", sm: "2xl", base: "md" }}
+        textOverflow="ellipsis"
+        overflow="hidden"
+        whiteSpace="nowrap"
+      >
+        {track.name}
+      </Heading>
+      <Text paddingBottom={4} color="gray.500" fontSize={{ md: "xl", sm: "lg", base: "sm" }}>
+        {track.artists.map((a) => a.name).join(", ")}
+      </Text>
+    </GridItem>
+  </Grid>
+)
 
 const Feed = () => {
   const userPlays = useUserPlays()
