@@ -35,7 +35,6 @@ const Layout = ({ title, children }: LayoutProps) => {
   const [currentUser, { isLoading }] = useCurrentUser()
   const [logoutMutation] = useMutation(logout)
   const { toggleColorMode } = useColorMode()
-
   const picture = (currentUser?.spotifyAccounts[0]?.cachedProfile as any)?.photos?.[0]?.value
 
   return (
